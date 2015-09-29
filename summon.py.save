@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import random
+def main(args):
+	summonStrings = ["{}, you have been summoned by {}! GET YO ASS OVER HERE",
+			 "{}, please come. It's not like {} wants to talk to you or anything, baaaaka",
+			 "{}, {} summoned you. But it's not like they miss you or anything.",
+			 ]
+	if len(args) > 0:
+		user = os.environ["SKYPE_FULLNAME"]
+		string = " ".join(args)
+		rnd = random.randint(0,len(summonStrings))
+		print summonStrings[rnd].format(" ".join(args), user)
+	else:
+		print "{} summons everyone to the chat!".format(user)
+
+main(sys.argv[1:])
+
