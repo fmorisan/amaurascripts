@@ -9,6 +9,7 @@ class StatefulHandler:
 		self.timeoutDelay = datetime.timedelta(seconds=6)
 		# user list is in the form of {username: [last_msg_datetime, strikes]}
 		self.userList = {}
+		self.init = self.__init__
 	def handle_message(self, msg, status):
 		content = body.split()
 		# check for spammers here
