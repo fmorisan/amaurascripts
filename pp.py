@@ -13,7 +13,7 @@ def main(args): #define main program body
 	with open(sharedVars.ppPath, "r") as ppFile:
 		ppJson = json.load(ppFile)
 	if args:
-		if args[1] in ppJson:
+		if args[0] in ppJson:
 			print "{} has {} pp.".format(args[1], ppJson[args[1]])
 		else:
 			ppHelp.helpText()
