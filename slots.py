@@ -9,34 +9,27 @@ import re #import regex
 import os #import os (why?)
 import time
 import random
-import csv # dan learn from this pl0x
-
+import sharedVars
+import ppHelp
 
 progname = '8ball'
 
 def main(args):
-	random.seed() 
-	slot1 = random.randint(1,12)  
-	slot2 = random.randint(1,12) 	
-	slot3 = random.randint(1,12) 
-	slot1c = content(slot1)
-	slot2c = content(slot2)
-	slot3c = content(slot3)
-	pp = open("/home/skype/pp") #open pp
-	ppLines = pp.readlines() #make pp a variable
-	ppString = "".join(ppLines) #make the variable a string
-	userName = re.compile("(?<="+os.environ["SKYPE_USERNAME"]+"¶)[0-9]+") #compile the entry-searcher
-	match = userName.search(ppString) #find the first match for the entry
-	pp.close()
-	if match:
-		userpp = match.group(0)
-		userpp = int(userpp)
-		userpp = userpp - 10
+	content = [":]",":[",":|",":>",":<",":O",":7","B)",":U",":s","D:",":D"]
+	random.seed()
+	slot1c = content[random.randint(11)]
+	slot2c = content[random.randint(11)]
+	slot3c = content[random.randint(11)]
+	with ppFile as open(sharedVars.ppPath, "r"):
+		ppJson = json.load(ppFile)
+	if sharedVars.username in ppJson:
+		userpp = ppJson[username]
 		if userpp < 0:
 			print "Sorry, you dont have enough pp to play this game.. Do !playosu first or something."
 			return
+		userpp = userpp - 10
 		print("You put 10pp into the slots machine...")
-		print(slot1c + "   " + slot2c + "   " + slot3c )
+		print(slot1 + "   " + slot2 + "   " + slot3 )
 		if slot1 == slot2 and slot2 == slot3:
 			if slot1 == 7:
 				print("SUPER JACKPOT!!") 
@@ -69,41 +62,8 @@ def main(args):
 			print("You lost! :(")
 			newUserpp = userpp
 		print "Total pp: " + str(newUserpp)
-		with open("/home/skype/pp", "w") as newfile:
-			newUserpp = str(newUserpp)
-			newfileString = re.sub("(?<="+os.environ["SKYPE_USERNAME"]+"¶)[0-9]+", newUserpp, ppString)
-			newfile.write(newfileString)
 	else:
-		with open("/home/skype/pp", "a+") as file2:
-			file2.write(os.environ["SKYPE_USERNAME"]+"¶100 \n")
-			print "Welcome to osu! You have been registered automatically, and 100pp have been added to your account. You can obtain more by playing osu (!playosu) or by begging other people to give you some!"
-			file2.close
-			return
-	
-def content(number):
-	if number == 1:
-		return ":]"
-	elif number == 2:
-		return ":["
-	elif number == 3:
-		return ":|"
-	elif number == 4:
-		return ":>"
-	elif number == 5:
-		return ":<"
-	elif number == 6:
-		return ":O"
-	elif number == 7:
-		return ":7"
-	elif number == 8:
-		return "B)"
-	elif number == 9:
-		return ":U"
-	elif number == 10:
-		return ":s"
-	elif number == 11:
-		return "D:"	
-	elif number == 12:
-		return ":D"
+		ppHelp.register(sharedVars.username, ppJson)
+
 if __name__ == '__main__':
 	main(sys.argv[1:])

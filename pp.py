@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-A simple sample module with Skype smileys
+A simple sample module with Skype somethings
 """
 import sys
 import os 
@@ -10,15 +10,14 @@ import sharedVars
 import ppHelp
 
 def main(args): #define main program body
-
-	if args:
+	with open(sharedVars.ppPath, "r") as ppFile:
+		ppJson = json.load(ppFile)
+	if args[1] in ppJson:
+		print "{} has {} pp.".format(args[1], ppJson[args[1]])
+	elif args:
 		ppHelp.helpText()
 	else:
-		with open(sharedVars.ppPath, "r") as ppFile:
-			ppJson = json.load(ppFile)
 		if sharedVars.username in ppJson:
-			
-
 			if ppJson[sharedVars.username] >= 0 and ppJson[sharedVars.username] < 200:
 				print "You (" + sharedVars.alias + ") have only " + str(ppJson[sharedVars.username]) + "pp. What a scrublord." #show it to the user
 			if ppJson[sharedVars.username] >= 200 and ppJson[sharedVars.username] < 600:

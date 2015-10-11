@@ -1,4 +1,4 @@
-#!/sevabot
+
 # -*- coding: utf-8 -*-
 """Simple stateful module"""
 import datetime
