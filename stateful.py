@@ -1,7 +1,12 @@
 #!/sevabot
 import datetime
+from sevabot.bot.stateful import StatefulSkypeHandler
+from sevabot.utils import ensure_unicode
 
-class StatefulHandler:
+
+class StatefulHandler(StatefulSkypeHandler):
+	def __init__(self):
+		pass
 	def __init__(self, sevabot):
 		self.sevabot = sevabot
 		self.skype = sevabot.getSkype()
@@ -9,9 +14,8 @@ class StatefulHandler:
 		self.timeoutDelay = datetime.timedelta(seconds=6)
 		# user list is in the form of {username: [last_msg_datetime, strikes]}
 		self.userList = {}
-		self.init = self.__init__
 	def handle_message(self, msg, status):
-		content = msg.Body.split()
+		content = ensure_unicode(msg.Body).split()
 		# check for spammers here
 		if msg.Sender in self.userList:
 			if msg.Datetime - self.userList[msg.Sender][0] < self.timeoutDelay:
