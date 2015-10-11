@@ -51,15 +51,16 @@ def main(args):
 				else: print "Entry already exists."
 			else: printHelp()
 		elif args[0] == "list":
-			willPrint = "List of faq entries: "
-			i = 0 ##spaghetti code
-			for entry in faqList: #iterate through every entry in faqList
-					i += 1 #count how many we've gone through
-					if i != len(faqList): #check if we're at the end of the list
-						willPrint = willPrint + entry + ", " #if we aren't, append the entry plus a comma
-					else:
-						willPrint = willPrint + entry + "." #if we are, append the entry plus a period instead
-			print willPrint #print the list
+			#willPrint = "List of faq entries: "
+			#i = 0 ##spaghetti code
+			#for entry in faqList: #iterate through every entry in faqList
+			#		i += 1 #count how many we've gone through
+			#		if i != len(faqList): #check if we're at the end of the list
+			#			willPrint = willPrint + entry + ", " #if we aren't, append the entry plus a comma
+			#		else:
+			#			willPrint = willPrint + entry + "." #if we are, append the entry plus a period instead
+			#print willPrint #print the list
+			print 'Check out the faq list at http://amaura.tk/faq !!'
 		else:
 			if len(args) == 1: 
 				args[0] = args[0].lower()
