@@ -4,7 +4,7 @@
 import datetime
 import logging
 # ??
-from sevabot.bot.modules import StatefulModule
+from sevabot.bot.stateful import StatefulHandler
 from sevabot.utils import ensure_unicode
 
 LOGGER = logging.getLogger('StatefulTest')
@@ -12,7 +12,7 @@ LOGGER = logging.getLogger('StatefulTest')
 from __future__ import unicode_literals
 
 
-class StatefulHandler(StatefulModule):
+class StatefulHandler(StatefulHandler):
     """The actual stateful handler class."""
     def __init__(self):
         self.commands = {}
