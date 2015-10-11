@@ -4,7 +4,7 @@
 import datetime
 import logging
 # ??
-from sevabot.bot.stateful import StatefulSkypeHandler
+from sevabot.bot.modules import StatefulModule
 from sevabot.utils import ensure_unicode
 
 LOGGER = logging.getLogger('StatefulTest')
@@ -12,7 +12,7 @@ LOGGER = logging.getLogger('StatefulTest')
 from __future__ import unicode_literals
 
 
-class StatefulHandler(StatefulSkypeHandler):
+class StatefulHandler(StatefulModule):
     """The actual stateful handler class."""
     def __init__(self):
         self.commands = {}
@@ -23,7 +23,7 @@ class StatefulHandler(StatefulSkypeHandler):
     def init(self, sevabot):
         self.sevabot = sevabot
         self.skype = sevabot.getSkype()
-    def handle_message(self, msg, status):
+    def handle(self, msg, status):
         LOGGER.debug("Handling message")
         content = ensure_unicode(msg.Body).split()
         # check for spammers here
@@ -43,7 +43,7 @@ class StatefulHandler(StatefulSkypeHandler):
         #else:
         #    self.user_list[msg.Sender] = [msg.Datetime, 0]
         if msg.Sender == 'fmorisan' and content[0] == "test":
-            msg.SendMessage("test")
+            msg.Chat.SendMessage("test")
         args = content[1:]
         for name, cmd in self.commands.items():
             if name == args[0]:
