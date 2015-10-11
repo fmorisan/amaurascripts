@@ -13,14 +13,19 @@ import json #swag
 import sharedVars #extra swag
 import ppHelp #i can't even hold all this swag
 
-def roll(ppJson):
+def roll(ppJson, hasNoFail):
 	loss = random.randint(0, ppJson[sharedVars.username]/2)
 	gain = random.randint(0,100)
-	newUserpp = ppJson[sharedVars.username] + gain - loss
+	if hasNoFail:
+		ppDiff = gain/5
+		print '[NF]',
+	else:
+		ppDiff = gain - loss
+	
+	newUserpp = ppJson[sharedVars.username] + ppDiff
 	if newUserpp < 0:
 		newUserpp = 0
 	if newUserpp > ppJson[sharedVars.username]:
-		ppDiff = newUserpp - ppJson[sharedVars.username]
 		if ppDiff >= 0 and ppDiff < 10:
 			ppDiff = str(ppDiff)
 			print sharedVars.alias + " FCs a 250 bpm map with DT and gets " + ppDiff + "pp.",
@@ -37,7 +42,7 @@ def roll(ppJson):
 			ppDiff = str(ppDiff)
 			print sharedVars.alias + " plays a DT TV Size and gains " + ppDiff + "pp.",
 	else:
-		ppDiff = ppJson[sharedVars.username] - newUserpp
+		ppDiff = -ppDiff
 		if ppDiff >= 0 and ppDiff < 10:
 			ppDiff = str(ppDiff)
 			print sharedVars.alias + " plays a 7 star map and loses " + ppDiff + "pp.",
@@ -101,10 +106,13 @@ def main(args): #if swag == over.9000:
 		with open(sharedVars.ppPath, "r") as ppFile: #open pp
 			ppJson = json.load(ppFile)
 		if sharedVars.username in ppJson:
-			roll(ppJson)
 			if sharedVars.username in invJson:
-				if "double_roll" in invJson[sharedVars.username]:
-					roll(ppJson)	
+				nofail = "nofail" in invJson[sharedVars.username]
+			
+			roll(ppJson, nofail)
+			if sharedVars.username in invJson:
+				if "double_roll" in invJson[sharedVars.username] and not nofail:
+					roll(ppJson, nofail)	
 
 		else:
 			ppHelp.register(sharedVars.username, ppJson)
