@@ -10,19 +10,18 @@ class StatefulHandler:
 		# user list is in the form of {username: [last_msg_datetime, strikes]}
 		self.userList = {}
 	def handle_message(self, msg, status):
-		body = ensure_unicode(msg.Body)
 		content = body.split()
 		# check for spammers here
 		if msg.Sender in self.userList:
-			if msg.Datetime - self.userlist[msg.Sender][0] < self.timeoutDelay:
-				strikes = self.userlist[msg.Sender][1]
+			if msg.Datetime - self.userList[msg.Sender][0] < self.timeoutDelay:
+				strikes = self.userList[msg.Sender][1]
 				if strikes == 6:
 					# RIP
 					msg.Chat.SendMessage('/kick', msg.Sender)
 				elif strikes in [4, 5]:
 					# INCOMING
 					msg.Chat.SendMessage('Stop spamming, you might be kicked!')
-					self.userlist[msg.Sender][1] += 1
+					self.userList[msg.Sender][1] += 1
 			else:	
 				# timeout period has passed, reset their strikes
 				self.userList[msg.Sender] = [msg.Datetime, 0]
