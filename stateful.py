@@ -3,6 +3,7 @@
 import datetime.datetime
 class StatefulHandler:
 	def __init__(self):
+		pass
 	
 	def init(self, sevabot):
 		self.sevabot = sevabot
