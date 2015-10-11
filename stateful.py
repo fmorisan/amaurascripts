@@ -5,9 +5,7 @@ from sevabot.utils import ensure_unicode
 
 
 class StatefulHandler(StatefulSkypeHandler):
-	def __init__(self):
-		pass
-	def __init__(self, sevabot):
+	def init(self, sevabot):
 		self.sevabot = sevabot
 		self.skype = sevabot.getSkype()
 		self.commands = {}
