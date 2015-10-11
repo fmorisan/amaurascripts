@@ -51,6 +51,17 @@ def main(args): #if swag == over.9000:
 						else: print "You already have this item."
 					else: print "You can't afford this."
 				else: print "Item not found."
+				
+			elif args[0] == "sell":
+				if args[1] in shopJson:
+					if args[1] in invJson[sharedVars.username]:
+						invJson[sharedVars.username][args[1]] = 0
+						print "Sold {}.".format(args[1])
+						saveChanges(ppJson,invJson)
+					else:
+						print "You don't have this item."
+				else:
+					print "Check your spelling."
 					
 			elif args[0] == "inventory":
 				i = 0

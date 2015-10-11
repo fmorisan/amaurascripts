@@ -25,7 +25,7 @@ class StatefulHandler:
 		if msg.Sender in self.userList:
 			if msg.Datetime - self.userlist[msg.Sender][0] < self.timeoutDelay:
 				strikes = self.userlist[msg.Sender][1]
-				if strikes = 6:
+				if strikes == 6:
 					# RIP
 					msg.Chat.SendMessage('/kick', msg.Sender)
 				elif strikes in [4, 5]:
