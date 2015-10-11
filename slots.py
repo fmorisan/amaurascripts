@@ -20,7 +20,7 @@ def main(args):
 	slot1c = content[random.randint(11)]
 	slot2c = content[random.randint(11)]
 	slot3c = content[random.randint(11)]
-	with ppFile as open(sharedVars.ppPath, "r"):
+	with open(sharedVars.ppPath, "r") as ppFile:
 		ppJson = json.load(ppFile)
 	if sharedVars.username in ppJson:
 		userpp = ppJson[username]
