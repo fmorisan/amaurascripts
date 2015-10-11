@@ -14,7 +14,7 @@ def main(args): #define main program body
 		ppJson = json.load(ppFile)
 	if args:
 		if args[0] in ppJson:
-			print "{} has {} pp.".format(args[1], ppJson[args[1]])
+			print "{} has {} pp.".format(args[0], ppJson[args[0]])
 		else:
 			ppHelp.helpText()
 	else:
