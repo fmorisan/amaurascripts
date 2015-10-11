@@ -38,4 +38,5 @@ def main(args): #define main program body
 		ppHelp.helpText()
 
 if __name__ == "__main__": #wat
-    main(sys.argv[1:]) #call main program body.
+	#main(sys.argv[1:]) #call main program body.
+	sys.exit()
