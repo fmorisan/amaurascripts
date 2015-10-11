@@ -55,7 +55,7 @@ def main(args): #if swag == over.9000:
 			elif args[0] == "sell":
 				if args[1] in shopJson:
 					if args[1] in invJson[sharedVars.username]:
-						invJson[sharedVars.username][args[1]] = 0
+						del invJson[sharedVars.username][args[1]]
 						print "Sold {}.".format(args[1])
 						saveChanges(ppJson,invJson)
 					else:
