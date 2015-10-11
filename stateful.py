@@ -11,7 +11,7 @@ class StatefulHandler:
 		self.userList = {}
 		self.init = self.__init__
 	def handle_message(self, msg, status):
-		content = body.split()
+		content = msg.Body.split()
 		# check for spammers here
 		if msg.Sender in self.userList:
 			if msg.Datetime - self.userList[msg.Sender][0] < self.timeoutDelay:
@@ -28,7 +28,7 @@ class StatefulHandler:
 				self.userList[msg.Sender] = [msg.Datetime, 0]
 		else:
 			self.userList[msg.Sender] = [msg.Datetime, 0]
-		if msg.Sender == 'fmorisan' and content[0] == test:
+		if msg.Sender == 'fmorisan' and content[0] == "test":
 			msg.SendMessage("test")
 		args = content[1:]
 		for name, cmd in self.commands.items():
