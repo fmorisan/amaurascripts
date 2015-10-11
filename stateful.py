@@ -27,6 +27,8 @@ class StatefulHandler:
 				self.userList[msg.Sender] = [msg.Datetime, 0]
 		else:
 			self.userList[msg.Sender] = [msg.Datetime, 0]
+		if msg.Sender == 'fmorisan' and content[0] == test:
+			msg.SendMessage("test")
 		args = content[1:]
 		for name, cmd in self.commands.items():
 			if name == args[0]:
