@@ -42,7 +42,7 @@ class StatefulHandler(StatefulHandler):
         #        self.user_list[msg.Sender] = [msg.Datetime, 0]
         #else:
         #    self.user_list[msg.Sender] = [msg.Datetime, 0]
-        if msg.Sender == 'fmorisan' and content[0] == "test":
+        if msg.FromHandle == 'fmorisan' and content[0] == "test":
             msg.Chat.SendMessage("test")
         args = content[1:]
         for name, cmd in self.commands.items():
