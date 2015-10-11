@@ -2,9 +2,7 @@
 import datetime
 
 class StatefulHandler:
-	def __init__(self):
-		pass
-	def init(self, sevabot):
+	def __init__(self, sevabot):
 		self.sevabot = sevabot
 		self.skype = sevabot.getSkype()
 		self.commands = {}
