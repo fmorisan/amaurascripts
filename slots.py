@@ -17,13 +17,13 @@ progname = '8ball'
 def main(args):
 	content = [":]",":[",":|",":>",":<",":O",":7","B)",":U",":s","D:",":D"]
 	random.seed()
-	slot1c = content[random.randint(0,11)]
-	slot2c = content[random.randint(0,11)]
-	slot3c = content[random.randint(0,11)]
+	slot1 = content[random.randint(0,11)]
+	slot2 = content[random.randint(0,11)]
+	slot3 = content[random.randint(0,11)]
 	with open(sharedVars.ppPath, "r") as ppFile:
 		ppJson = json.load(ppFile)
 	if sharedVars.username in ppJson:
-		userpp = ppJson[username]
+		userpp = ppJson[sharedVars.username]
 		if userpp < 0:
 			print "Sorry, you dont have enough pp to play this game.. Do !playosu first or something."
 			return
@@ -62,6 +62,9 @@ def main(args):
 			print("You lost! :(")
 			newUserpp = userpp
 		print "Total pp: " + str(newUserpp)
+		ppJson[sharedVars.username] = newUserpp
+		with open(sharedVars.ppPath, 'w') as ppFile:
+			json.dump(ppJson, ppFile, indent=1)
 	else:
 		ppHelp.register(sharedVars.username, ppJson)
 
