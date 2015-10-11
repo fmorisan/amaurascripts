@@ -12,8 +12,9 @@ import Skype4Py
 
 from sevabot.bot.stateful import StatefulSkypeHandler
 from sevabot.utils import ensure_unicode
+import time
 
-logger = logging.getLogger('Call')
+logger = logging.getLogger('Stateful')
 
 # Set to debug only during dev
 logger.setLevel(logging.INFO)
@@ -44,8 +45,10 @@ class Handler(StatefulSkypeHandler):
 
         self.skype = sevabot.getSkype()
         self.calls = {}
+        self.userlist = {}
+        self.timeoutTime = 5
 
-        self.commands = {'help': self.help, 'start': self.start_call, 'end': self.end_call}
+        self.commands = {}
 
     def handle_message(self, msg, status):
         """
@@ -59,13 +62,30 @@ class Handler(StatefulSkypeHandler):
         # If the separators are not specified, runs of consecutive
         # whitespace are regarded as a single separator
         words = body.split()
+        handle = msg.Sender.Handle
 
-        if not len(words):
-            return False
+        if not len(words) or handle == 'alchemisbot':
+            return True
+
+        if handle not in self.userlist:
+            self.userlist[handle] = [int(time.time()), 0]
+
+        if time.time() - self.userlist[handle][0] < self.timeoutTime:
+            self.userlist[handle][1] += 1
+        else:
+            self.userlist[handle][1] = 0
+
+        if self.userlist[handle][1] in [4,5]:
+            msg.Chat.SendMessage("Stop flooding, {}! You might get kicked from the chat! Wait {}s before posting again.".format(handle, int(self.timeoutTime-time.time()+self.userlist[handle][0])))
+        if self.userlist[handle][1] >= 6:
+            msg.Chat.SendMessage("/kick {}".format(handle))
 
         if body == "test" and msg.Sender.Handle == "fmorisan":
-                msg.Chat.SendMessage("test")
-                return True
+            data = self.userlist[msg.Sender.Handle]
+            msg.Chat.SendMessage("test, message {}, dt {}".format(data[1], int(time.time()-data[0])))
+            msg.Chat.SendMessage(repr(self.userlist))
+
+        self.userlist[handle][0] = time.time()
         return False
 
     def shutdown():
@@ -79,24 +99,6 @@ class Handler(StatefulSkypeHandler):
         Show help message to the sender.
         """
         msg.Chat.SendMessage(HELP_TEXT)
-
-    def is_call_active(self, chat_name=None):
-        """
-        Is a call from the chat active?
-        """
-        pass
-
-    def start_call(self, msg, status, args):
-        """
-        Start a conference call of the chat if any call is not active.
-        """
-	pass
-
-    def end_call(self, msg, status, args):
-        """
-        Finish a conference call of the chat.
-        """
-        pass
 
 # Export the instance to Sevabot
 sevabot_handler = Handler()
