@@ -1,24 +1,17 @@
 #!/sevabot
+from datetime import datetime
 
-import datetime.datetime
 class StatefulHandler:
 	def __init__(self):
 		pass
-	
 	def init(self, sevabot):
 		self.sevabot = sevabot
 		self.skype = sevabot.getSkype()
-		
 		self.commands = {}
-		
 		self.timeoutDelay = datetime.timedelta(seconds=6)
-		
 		# user list is in the form of {username: [last_msg_datetime, strikes]}
 		self.userList = {}
-		
-		
 	def handle_message(self, msg, status):
-		
 		body = ensure_unicode(msg.Body)
 		content = body.split()
 		# check for spammers here
@@ -37,9 +30,7 @@ class StatefulHandler:
 				self.userList[msg.Sender] = [msg.Datetime, 0]
 		else:
 			self.userList[msg.Sender] = [msg.Datetime, 0]
-		
 		args = content[1:]
-		
 		for name, cmd in self.commands.items():
 			if name == args[0]:
 				cmd(msg, status, args)
