@@ -23,7 +23,7 @@ class StatefulHandler(StatefulHandler):
     def init(self, sevabot):
         self.sevabot = sevabot
         self.skype = sevabot.getSkype()
-    def handle(self, msg, status):
+    def handler(self, msg, status):
         LOGGER.debug("Handling message")
         content = ensure_unicode(msg.Body).split()
         # check for spammers here
