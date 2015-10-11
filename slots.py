@@ -17,9 +17,9 @@ progname = '8ball'
 def main(args):
 	content = [":]",":[",":|",":>",":<",":O",":7","B)",":U",":s","D:",":D"]
 	random.seed()
-	slot1c = content[random.randint(11)]
-	slot2c = content[random.randint(11)]
-	slot3c = content[random.randint(11)]
+	slot1c = content[random.randint(0,11)]
+	slot2c = content[random.randint(0,11)]
+	slot3c = content[random.randint(0,11)]
 	with open(sharedVars.ppPath, "r") as ppFile:
 		ppJson = json.load(ppFile)
 	if sharedVars.username in ppJson:
