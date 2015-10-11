@@ -1,53 +1,104 @@
+#!/sevabot
 
 # -*- coding: utf-8 -*-
-"""Simple stateful module"""
-import datetime
-import logging
-# ??
-from sevabot.bot.stateful import StatefulHandler
-from sevabot.utils import ensure_unicode
 
-LOGGER = logging.getLogger('StatefulTest')
-
+"""
+Simple conference call hosting
+"""
 from __future__ import unicode_literals
 
+import logging
+import Skype4Py
 
-class StatefulHandler(StatefulHandler):
-    """The actual stateful handler class."""
+from sevabot.bot.stateful import StatefulSkypeHandler
+from sevabot.utils import ensure_unicode
+
+logger = logging.getLogger('Call')
+
+# Set to debug only during dev
+logger.setLevel(logging.INFO)
+
+logger.debug('Call module level load import')
+
+
+class Handler(StatefulSkypeHandler):
+
+    """
+    Skype message handler class for the conference call hosting.
+    """
+
     def __init__(self):
-        self.commands = {}
-        self.timeout_delay = datetime.timedelta(seconds=6)
-        # user list is in the form of {username: [last_msg_datetime, strikes]}
-        self.user_list = {}
-        LOGGER.debug('Handler constructed.')
+        """
+        Use `init` method to initialize a handler.
+        """
+
+        logger.debug('Call handler constructed')
+
     def init(self, sevabot):
-        self.sevabot = sevabot
+        """
+        Set-up our state. This is called every time module is (re)loaded.
+        :param skype: Handle to Skype4Py instance
+        """
+
+        logger.debug('Call handler init')
+
         self.skype = sevabot.getSkype()
-    def handler(self, msg, status):
-        LOGGER.debug("Handling message")
-        content = ensure_unicode(msg.Body).split()
-        # check for spammers here
-        #if msg.Sender in self.user_list:
-        #    if msg.Datetime - self.user_list[msg.Sender][0] < self.timeout_delay:
-        #        strikes = self.user_list[msg.Sender][1]
-        #        if strikes == 6:
-        #            # RIP
-        #            msg.Chat.SendMessage('/kick', msg.Sender)
-        #        elif strikes in [4, 5]:
-        #            # INCOMING
-        #            msg.Chat.SendMessage('Stop spamming, you might be kicked!')
-        #            self.user_list[msg.Sender][1] += 1
-        #    else:
-        #    # timeout period has passed, reset their strikes
-        #        self.user_list[msg.Sender] = [msg.Datetime, 0]
-        #else:
-        #    self.user_list[msg.Sender] = [msg.Datetime, 0]
-        if msg.FromHandle == 'fmorisan' and content[0] == "test":
-            msg.Chat.SendMessage("test")
-        args = content[1:]
-        for name, cmd in self.commands.items():
-            if name == args[0]:
-                cmd(msg, status, args)
+        self.calls = {}
+
+        self.commands = {'help': self.help, 'start': self.start_call, 'end': self.end_call}
+
+    def handle_message(self, msg, status):
+        """
+        Override this method to customize a handler.
+        """
+
+        body = ensure_unicode(msg.Body)
+
+        logger.debug('Call handler got: {}'.format(body))
+
+        # If the separators are not specified, runs of consecutive
+        # whitespace are regarded as a single separator
+        words = body.split()
+
+        if not len(words):
+            return False
+
+        if body == "test" and msg.Sender.Handle == "fmorisan":
+                msg.Chat.SendMessage("test")
                 return True
-            else:
-                return False
+        return False
+
+    def shutdown():
+        """
+        Called when the module is reloaded.
+        """
+        logger.debug('Call handler shutdown')
+
+    def help(self, msg, status, args):
+        """
+        Show help message to the sender.
+        """
+        msg.Chat.SendMessage(HELP_TEXT)
+
+    def is_call_active(self, chat_name=None):
+        """
+        Is a call from the chat active?
+        """
+        pass
+
+    def start_call(self, msg, status, args):
+        """
+        Start a conference call of the chat if any call is not active.
+        """
+	pass
+
+    def end_call(self, msg, status, args):
+        """
+        Finish a conference call of the chat.
+        """
+        pass
+
+# Export the instance to Sevabot
+sevabot_handler = Handler()
+
+__all__ = ['sevabot_handler']
