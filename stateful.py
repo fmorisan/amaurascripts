@@ -13,6 +13,7 @@ import Skype4Py
 from sevabot.bot.stateful import StatefulSkypeHandler
 from sevabot.utils import ensure_unicode
 import time
+import json
 
 logger = logging.getLogger('Stateful')
 
@@ -49,6 +50,11 @@ class Handler(StatefulSkypeHandler):
         self.timeoutTime = 5
         self.sp = True
         self.oplist = ["fmorisan", "euphoricradioactivity"]
+        try:
+            self.banlist = json.load(open(sharedVars.bannedFile, "r"))
+        except:
+            # file not there?
+            self.banlist = []
 
         self.commands = {}
 
@@ -82,10 +88,17 @@ class Handler(StatefulSkypeHandler):
         if self.userlist[handle][1] >= 6:
             msg.Chat.SendMessage("/kick {}".format(handle))
 
-        if handle in self.oplist and body == "sp":
-            self.sp = not self.sp
-            msg.Chat.SendMessage("sp is now " + ["off","on"][self.sp]) # False is 0, True is 1
-            # hax because bool is a subclass of int and thus can be used as a list index
+        if handle in self.oplist:
+            if body == "sp":
+                self.sp = not self.sp
+                msg.Chat.SendMessage("sp is now " + ["off","on"][self.sp]) # False is 0, True is 1
+                # hax because bool is a subclass of int and thus can be used as a list index
+            if body.startswith("!ban"):
+                self.banlist.append(words[1])
+                msg.Chat.SendMessage("User {} banned from bot interaction.".format(words[1]))
+            if body.startswith("!unban"):
+                self.banlist.remove(words[1])
+                msg.Chat.SendMessage("User {} unbanned from bot interaction.".format(words[1]))
         
         if handle not in self.oplist and body == "!reload":
             return True
@@ -98,6 +111,7 @@ class Handler(StatefulSkypeHandler):
         """
         Called when the module is reloaded.
         """
+        json.dump(self.banlist, open(sharedVars.bannedFile, "w"))
         logger.debug('Call handler shutdown')
 
     def help(self, msg, status, args):
