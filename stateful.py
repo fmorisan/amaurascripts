@@ -100,6 +100,9 @@ class Handler(StatefulSkypeHandler):
                 self.banlist.remove(words[1])
                 msg.Chat.SendMessage("User {} unbanned from bot interaction.".format(words[1]))
         
+        if handle in self.banlist:
+            return True
+        
         if handle not in self.oplist and body == "!reload":
             return True
             # ignore reloads done by people who are not chat operators
