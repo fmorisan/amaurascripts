@@ -47,6 +47,7 @@ class Handler(StatefulSkypeHandler):
         self.calls = {}
         self.userlist = {}
         self.timeoutTime = 5
+        self.sp = True
 
         self.commands = {}
 
@@ -70,7 +71,7 @@ class Handler(StatefulSkypeHandler):
         if handle not in self.userlist:
             self.userlist[handle] = [int(time.time()), 0]
 
-        if time.time() - self.userlist[handle][0] < self.timeoutTime:
+        if time.time() - self.userlist[handle][0] < self.timeoutTime and self.sp:
             self.userlist[handle][1] += 1
         else:
             self.userlist[handle][1] = 0
@@ -80,10 +81,10 @@ class Handler(StatefulSkypeHandler):
         if self.userlist[handle][1] >= 6:
             msg.Chat.SendMessage("/kick {}".format(handle))
 
-        if body == "test" and msg.Sender.Handle == "fmorisan":
-            data = self.userlist[msg.Sender.Handle]
-            msg.Chat.SendMessage("test, message {}, dt {}".format(data[1], int(time.time()-data[0])))
-            msg.Chat.SendMessage(repr(self.userlist))
+        if msg.Sender.Handle in ["fmorisan", "euphoricradioactivity"] and body == "sp":
+            self.sp = not self.sp
+            msg.Chat.SendMessage("sp is now " + ["off","on"][self.sp]) # False is 0, True is 1
+            # hax because bool is a subclass of int and thus can be used as a list index
 
         self.userlist[handle][0] = time.time()
         return False

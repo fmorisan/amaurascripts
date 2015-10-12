@@ -12,6 +12,7 @@ shopPath = "shop"
 inventoryPath = "inventory"
 shopPath = os.path.expanduser("~/shop")
 inventoryPath = os.path.expanduser("~/inventory")
+bannedPath = os.path.expanduser("~/bans")
 
 
 username = os.environ["SKYPE_USERNAME"]
