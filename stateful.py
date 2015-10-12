@@ -93,12 +93,15 @@ class Handler(StatefulSkypeHandler):
                 self.sp = not self.sp
                 msg.Chat.SendMessage("sp is now " + ["off","on"][self.sp]) # False is 0, True is 1
                 # hax because bool is a subclass of int and thus can be used as a list index
+                return True
             if body.startswith("!ban"):
                 self.banlist.append(words[1])
                 msg.Chat.SendMessage("User {} banned from bot interaction.".format(words[1]))
+                return True
             if body.startswith("!unban"):
                 self.banlist.remove(words[1])
                 msg.Chat.SendMessage("User {} unbanned from bot interaction.".format(words[1]))
+                return True
         
         if handle in self.banlist:
             return True
