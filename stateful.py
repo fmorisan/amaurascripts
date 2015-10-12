@@ -48,6 +48,7 @@ class Handler(StatefulSkypeHandler):
         self.userlist = {}
         self.timeoutTime = 5
         self.sp = True
+        self.oplist = ["fmorisan", "euphoricradioactivity"]
 
         self.commands = {}
 
@@ -81,11 +82,15 @@ class Handler(StatefulSkypeHandler):
         if self.userlist[handle][1] >= 6:
             msg.Chat.SendMessage("/kick {}".format(handle))
 
-        if msg.Sender.Handle in ["fmorisan", "euphoricradioactivity"] and body == "sp":
+        if handle in self.oplist and body == "sp":
             self.sp = not self.sp
             msg.Chat.SendMessage("sp is now " + ["off","on"][self.sp]) # False is 0, True is 1
             # hax because bool is a subclass of int and thus can be used as a list index
-
+        
+        if handle not in self.oplist and body == "!reload":
+            return True
+            # ignore reloads done by people who are not chat operators
+        
         self.userlist[handle][0] = time.time()
         return False
 
